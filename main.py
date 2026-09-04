@@ -97,7 +97,7 @@ def download_with_resume(url, local_filepath, max_retries=5):
                             if downloaded == last_progress:
                                 if current_time - last_progress_time > 10:
                                     print(
-                                        f"\n⚠️ Нет данных от сервера в течение 10 секунд! Переподключаемся..."
+                                        "\n⚠️ Нет данных от сервера в течение 10 секунд! Переподключаемся..."
                                     )
                                     raise TimeoutError("Нет данных от сервера")
                             else:
@@ -126,7 +126,7 @@ def download_with_resume(url, local_filepath, max_retries=5):
         except KeyboardInterrupt:
             print("\n\n⏹️ Прервано пользователем")
             return False
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"\n❌ Неожиданная ошибка: {e}")
             retry_count += 1
             time.sleep(retry_count * 2)
@@ -150,6 +150,7 @@ def progress_bar(current, total, start_time, retry_count):
         speed_str = format_size(speed) + "/с"
     else:
         speed_str = "..."
+        speed = 0
 
     if speed > 0:
         remaining = (total - current) / speed
@@ -260,7 +261,7 @@ def get_save_path(url):
                     os.makedirs(folder, exist_ok=True)
                     print(f"✅ Папка создана: {folder}")
                     break
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     print(f"❌ Не удалось создать папку: {e}")
             else:
                 print("Попробуйте указать другой путь.")
@@ -282,7 +283,7 @@ def get_save_path(url):
         if choice in ["o", "overwrite", "перезаписать"]:
             # Удаляем старый файл
             os.remove(full_path)
-            print(f"🗑️ Старый файл удалён.")
+            print("🗑️ Старый файл удалён.")
         elif choice in ["n", "next", "продолжить"]:
             print("Продолжаем качать")
         elif choice in ["r", "rename", "переименовать"]:
@@ -333,7 +334,7 @@ if __name__ == "__main__":
         success = download_with_resume(file_url, save_path, max_retries=9999999999)
         if not success:
             print("\n⚠️ Загрузка не завершена. Попробуйте запустить программу снова.")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"\n❌ Ошибка: {e}")
 
     input("\n\nНажмите Enter для выхода...")
