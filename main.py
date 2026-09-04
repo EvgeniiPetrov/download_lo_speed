@@ -268,7 +268,9 @@ def get_save_path(url):
     if os.path.exists(full_path):
         print(f"\n⚠️ Файл '{full_path}' уже существует.")
         choice = (
-            input("Что делать? (o - перезаписать, r - переименовать, a - отмена): ")
+            input(
+                "Что делать? (o - перезаписать, r - переименовать, a - отмена, n - далее качать): "
+            )
             .strip()
             .lower()
         )
@@ -277,6 +279,8 @@ def get_save_path(url):
             # Удаляем старый файл
             os.remove(full_path)
             print(f"🗑️ Старый файл удалён.")
+        elif choice in ["n", "next", "продолжить"]:
+            print("Продолжаем качать")
         elif choice in ["r", "rename", "переименовать"]:
             # Добавляем номер к имени
             base, ext = os.path.splitext(filename)
