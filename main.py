@@ -1,8 +1,9 @@
-import requests
 import os
-import time
-import sys
 import signal
+import sys
+import time
+
+import requests
 
 # Глобальный флаг для прерывания
 interrupted = False
