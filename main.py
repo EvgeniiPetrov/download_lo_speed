@@ -50,8 +50,11 @@ def download_with_resume(url, local_filepath, max_retries=5):
                 if "content-length" in head_response.headers:
                     total_size = int(head_response.headers["content-length"])
                     print(f"📊 Общий размер: {format_size(total_size)}")
-            except:
-                pass
+            except requests.exceptions.RequestException as error:
+                print(f"Ошибка сети {error}")
+                sys.exit(0)
+            except Exception as error:  # noqa: BLE001
+                print(f"Ошибка {error}")
 
             # Загружаем с таймаутами
             downloaded = resume_byte
