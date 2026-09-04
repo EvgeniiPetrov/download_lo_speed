@@ -18,7 +18,7 @@ def signal_handler(sig, frame):
 
 def download_with_resume(url, local_filepath, max_retries=5):
     """Скачивает файл с докачкой и автоматическими переподключениями"""
-    global interrupted
+    global interrupted  # noqa: PLW0602
 
     retry_count = 0
     total_downloaded_overall = 0
