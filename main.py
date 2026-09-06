@@ -52,7 +52,7 @@ def download_with_resume(url, local_filepath, max_retries=5):
                     print(f"📊 Общий размер: {format_size(total_size)}")
             except requests.exceptions.RequestException as error:
                 print(f"Ошибка сети {error}")
-                sys.exit(0)
+                continue
             except Exception as error:  # noqa: BLE001
                 print(f"Ошибка {error}")
 
