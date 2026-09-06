@@ -52,6 +52,7 @@ def download_with_resume(url, local_filepath, max_retries=5):
                     print(f"📊 Общий размер: {format_size(total_size)}")
             except requests.exceptions.RequestException as error:
                 print(f"Ошибка сети {error}")
+                retry_count += 1
                 continue
             except Exception as error:  # noqa: BLE001
                 print(f"Ошибка {error}")
@@ -268,39 +269,42 @@ def get_save_path(url):
 
     # Формируем полный путь
     full_path = os.path.join(folder, filename)
-
-    # Проверяем, не существует ли уже файл
-    if os.path.exists(full_path):
-        print(f"\n⚠️ Файл '{full_path}' уже существует.")
-        choice = (
-            input(
-                "Что делать? (o - перезаписать, r - переименовать, a - отмена, n - далее качать): "
+    while True:
+        # Проверяем, не существует ли уже файл
+        if os.path.exists(full_path):
+            print(f"\n⚠️ Файл '{full_path}' уже существует.")
+            choice = (
+                input(
+                    "Что делать? (o - перезаписать, r - переименовать, a - отмена, n - далее качать): "
+                )
+                .strip()
+                .lower()
             )
-            .strip()
-            .lower()
-        )
 
-        if choice in ["o", "overwrite", "перезаписать"]:
-            # Удаляем старый файл
-            os.remove(full_path)
-            print("🗑️ Старый файл удалён.")
-        elif choice in ["n", "next", "продолжить"]:
-            print("Продолжаем качать")
-        elif choice in ["r", "rename", "переименовать"]:
-            # Добавляем номер к имени
-            base, ext = os.path.splitext(filename)
-            counter = 1
-            while True:
-                new_filename = f"{base}_{counter}{ext}"
-                new_full_path = os.path.join(folder, new_filename)
-                if not os.path.exists(new_full_path):
-                    full_path = new_full_path
-                    print(f"📝 Файл будет сохранён как: {new_filename}")
-                    break
-                counter += 1
-        else:
-            print("❌ Отмена.")
-            sys.exit(0)
+            if choice in ["o", "overwrite", "перезаписать"]:
+                # Удаляем старый файл
+                os.remove(full_path)
+                print("🗑️ Старый файл удалён.")
+                break
+            elif choice in ["n", "next", "продолжить"]:
+                print("Продолжаем качать")
+                break
+            elif choice in ["r", "rename", "переименовать"]:
+                # Добавляем номер к имени
+                base, ext = os.path.splitext(filename)
+                counter = 1
+                while True:
+                    new_filename = f"{base}_{counter}{ext}"
+                    new_full_path = os.path.join(folder, new_filename)
+                    if not os.path.exists(new_full_path):
+                        full_path = new_full_path
+                        print(f"📝 Файл будет сохранён как: {new_filename}")
+                        break
+                    counter += 1
+                break
+            else:
+                print("❌ Введите корректное значение!!!!")
+                continue
 
     return full_path
 
