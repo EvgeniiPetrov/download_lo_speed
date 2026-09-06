@@ -53,6 +53,7 @@ def download_with_resume(url, local_filepath, max_retries=5):
             except requests.exceptions.RequestException as error:
                 print(f"Ошибка сети {error}")
                 retry_count += 1
+                print("⏳ Повторная попытка подключения...")
                 continue
             except Exception as error:  # noqa: BLE001
                 print(f"Ошибка {error}")
