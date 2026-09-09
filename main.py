@@ -54,6 +54,7 @@ def download_with_resume(url, local_filepath, max_retries=5):
                 print(f"Ошибка сети {error}")
                 retry_count += 1
                 print("⏳ Повторная попытка подключения...")
+                time.sleep(retry_count)
                 continue
             except Exception as error:  # noqa: BLE001
                 print(f"Ошибка {error}")
@@ -119,11 +120,18 @@ def download_with_resume(url, local_filepath, max_retries=5):
             TimeoutError,
         ) as e:
             retry_count += 1
-            print(f"\n⚠️ Ошибка: {str(e)[:50]}")
-            print(
-                f"⏳ Переподключение через {retry_count * 2} секунд... (попытка {retry_count}/{max_retries})"
-            )
-            time.sleep(retry_count * 2)
+            print(f"\n⚠️ Ошибка: {e!r}")
+            if retry_count > 60:
+                max_retry_time = 60
+                print(
+                    f"⏳ Переподключение через {max_retry_time} секунд... (попытка {retry_count}/{max_retries})"
+                )
+                time.sleep(max_retry_time)
+            else:
+                print(
+                    f"⏳ Переподключение через {retry_count * 2} секунд... (попытка {retry_count}/{max_retries})"
+                )
+                time.sleep(retry_count * 2)
 
         except KeyboardInterrupt:
             print("\n\n⏹️ Прервано пользователем")
@@ -131,7 +139,10 @@ def download_with_resume(url, local_filepath, max_retries=5):
         except Exception as e:  # noqa: BLE001
             print(f"\n❌ Неожиданная ошибка: {e}")
             retry_count += 1
-            time.sleep(retry_count * 2)
+            if retry_count > 60:
+                time.sleep(60)
+            else:
+                time.sleep(retry_count * 2)
 
     print(f"\n❌ Не удалось завершить загрузку после {max_retries} попыток")
     if os.path.exists(local_filepath):
