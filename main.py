@@ -46,7 +46,8 @@ def download_with_resume(url, local_filepath, max_retries=5):
             # Получаем общий размер файла
             total_size = None
             try:
-                head_response = requests.head(url, timeout=10)
+                print(f"Делаю запрос к {url}")
+                head_response = requests.head(url, timeout=30)
                 if "content-length" in head_response.headers:
                     total_size = int(head_response.headers["content-length"])
                     print(f"📊 Общий размер: {format_size(total_size)}")
@@ -317,6 +318,8 @@ def get_save_path(url):
             else:
                 print("❌ Введите корректное значение!!!!")
                 continue
+        else:
+            break
 
     return full_path
 
