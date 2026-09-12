@@ -2,6 +2,7 @@ import os
 import signal
 import sys
 import time
+from datetime import UTC, datetime
 
 import requests
 
@@ -46,7 +47,9 @@ def download_with_resume(url, local_filepath, max_retries=5):
             # Получаем общий размер файла
             total_size = None
             try:
+                datetime_now: datetime = datetime.now(UTC)
                 print(f"Делаю запрос к {url}")
+                print(datetime_now.strftime("%d.%m.%Y %H:%M:%S"))
                 head_response = requests.head(url, timeout=30)
                 if "content-length" in head_response.headers:
                     total_size = int(head_response.headers["content-length"])
