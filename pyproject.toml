@@ -1,9 +1,20 @@
 [project]
 name = "download-lo-speed"
 version = "0.1.0"
-description = "Add your description here"
+description = "Download a file from the Internet when the current Internet speed is low (10–20 kbit/s)."
 readme = "README.md"
+
+authors = [
+    { name = "Evgenii Petrov", email = "epoy74@gmail.com" },
+    { name = "Evgenii Petrov", email = "p174@mail.ru" },
+]
 requires-python = ">=3.13"
 dependencies = [
     "requests>=2.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.22.3",
+    "ruff>=0.16.7",
 ]
