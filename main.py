@@ -17,42 +17,6 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-def resolve_redirect_url(url, location=None, ask_user=True):
-    """Проверяет редирект и, при необходимости, спрашивает пользователя."""
-    if location is None:
-        try:
-            response = requests.get(url, allow_redirects=False, timeout=30)
-        except requests.exceptions.RequestException as error:
-            print(f"⚠️ Не удалось проверить редирект: {error}")
-            return url
-
-        status_code = response.status_code
-        location = response.headers.get("Location")
-    else:
-        status_code = 302
-
-    if status_code in (301, 302, 303, 307, 308) and location:
-        target_url = urljoin(url, location)
-        print(f"\n🔁 Ссылка ведёт на другой URL: {target_url}")
-        if ask_user:
-            answer = input("Перейти по редиректу? [Y/n]: ").strip().lower()
-            if answer not in ("", "y", "yes", "д", "да"):
-                print("⏹️ Переход по редиректу отменён.")
-                return None
-        return target_url
-
-    if status_code in (401, 403):
-        print("⚠️ Ссылка требует авторизацию или доступ закрыт.")
-
-    return url
-
-
-=======
->>>>>>> parent of 3abc348 (feat: Добавил проверку на редирект и вопрос пользователю перед переходом по редиректу)
-=======
->>>>>>> parent of 3abc348 (feat: Добавил проверку на редирект и вопрос пользователю перед переходом по редиректу)
 def download_with_resume(url, local_filepath, max_retries=5):
     """Скачивает файл с докачкой и автоматическими переподключениями"""
     global interrupted  # noqa: PLW0602
