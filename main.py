@@ -22,7 +22,7 @@ def resolve_redirect_url(url, location=None, ask_user=True):
     """Проверяет редирект и, при необходимости, спрашивает пользователя."""
     if location is None:
         try:
-            response = requests.get(url, allow_redirects=False, timeout=60)
+            response = requests.get(url, allow_redirects=False, timeout=30)
         except requests.exceptions.RequestException as error:
             print(f"⚠️ Не удалось проверить редирект: {error}")
             return url
