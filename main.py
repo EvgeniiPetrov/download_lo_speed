@@ -3,7 +3,6 @@ import signal
 import sys
 import time
 from datetime import UTC, datetime
-from urllib.parse import urljoin
 
 import requests
 
@@ -18,6 +17,7 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 
+<<<<<<< HEAD
 def resolve_redirect_url(url, location=None, ask_user=True):
     """Проверяет редирект и, при необходимости, спрашивает пользователя."""
     if location is None:
@@ -48,6 +48,8 @@ def resolve_redirect_url(url, location=None, ask_user=True):
     return url
 
 
+=======
+>>>>>>> parent of 3abc348 (feat: Добавил проверку на редирект и вопрос пользователю перед переходом по редиректу)
 def download_with_resume(url, local_filepath, max_retries=5):
     """Скачивает файл с докачкой и автоматическими переподключениями"""
     global interrupted  # noqa: PLW0602
@@ -373,12 +375,6 @@ if __name__ == "__main__":
     if not file_url:
         file_url = "https://speed.hetzner.de/100MB.bin"
         print(f"Использую тестовый URL: {file_url}")
-
-    file_url = resolve_redirect_url(file_url)
-    if file_url is None:
-        print("\n⚠️ Загрузка отменена.")
-        input("\n\nНажмите Enter для выхода...")
-        sys.exit(0)
 
     # Получаем путь для сохранения
     save_path = get_save_path(file_url)
