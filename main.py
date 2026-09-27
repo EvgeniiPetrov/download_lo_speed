@@ -3,6 +3,7 @@ import signal
 import sys
 import time
 from datetime import UTC, datetime
+from urllib.parse import urljoin
 
 import requests
 
@@ -15,6 +16,36 @@ def signal_handler(sig, frame):
     interrupted = True
     print("\n\n⏹️ Прерывание...")
     sys.exit(0)
+
+
+def resolve_redirect_url(url, location=None, ask_user=True):
+    """Проверяет редирект и, при необходимости, спрашивает пользователя."""
+    if location is None:
+        try:
+            response = requests.get(url, allow_redirects=False, timeout=60)
+        except requests.exceptions.RequestException as error:
+            print(f"⚠️ Не удалось проверить редирект: {error}")
+            return url
+
+        status_code = response.status_code
+        location = response.headers.get("Location")
+    else:
+        status_code = 302
+
+    if status_code in (301, 302, 303, 307, 308) and location:
+        target_url = urljoin(url, location)
+        print(f"\n🔁 Ссылка ведёт на другой URL: {target_url}")
+        if ask_user:
+            answer = input("Перейти по редиректу? [Y/n]: ").strip().lower()
+            if answer not in ("", "y", "yes", "д", "да"):
+                print("⏹️ Переход по редиректу отменён.")
+                return None
+        return target_url
+
+    if status_code in (401, 403):
+        print("⚠️ Ссылка требует авторизацию или доступ закрыт.")
+
+    return url
 
 
 def download_with_resume(url, local_filepath, max_retries=5):
@@ -342,6 +373,12 @@ if __name__ == "__main__":
     if not file_url:
         file_url = "https://speed.hetzner.de/100MB.bin"
         print(f"Использую тестовый URL: {file_url}")
+
+    file_url = resolve_redirect_url(file_url)
+    if file_url is None:
+        print("\n⚠️ Загрузка отменена.")
+        input("\n\nНажмите Enter для выхода...")
+        sys.exit(0)
 
     # Получаем путь для сохранения
     save_path = get_save_path(file_url)
