@@ -18,6 +18,7 @@ def signal_handler(sig, frame):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 def resolve_redirect_url(url, location=None, ask_user=True):
     """Проверяет редирект и, при необходимости, спрашивает пользователя."""
     if location is None:
@@ -48,6 +49,8 @@ def resolve_redirect_url(url, location=None, ask_user=True):
     return url
 
 
+=======
+>>>>>>> parent of 3abc348 (feat: Добавил проверку на редирект и вопрос пользователю перед переходом по редиректу)
 =======
 >>>>>>> parent of 3abc348 (feat: Добавил проверку на редирект и вопрос пользователю перед переходом по редиректу)
 def download_with_resume(url, local_filepath, max_retries=5):
